@@ -1,0 +1,38 @@
+spring:
+    application:
+        name: config-server
+    profiles:
+        active: native
+    cloud:
+        config:
+            server:
+                native:
+                    searchLocations: file:./cfg/
+    security:
+        user:
+            name: configserver
+            password: configserver
+            roles: ACTUATOR_ADMIN
+application:
+    refreshDelayInMs: 60000
+    clients:
+        -
+            name: pyramid-local.yml
+            url: localhost:8081
+            username: actuator
+            userpassword: actuator
+server:
+    port: 8800
+management:
+  endpoints:
+      enabled-by-default: true
+      web:
+          exposure:
+              include: "*"
+  metrics:
+    export:
+      prometheus:
+          enabled: true
+  endpoint:
+    refresh:
+        enabled: true

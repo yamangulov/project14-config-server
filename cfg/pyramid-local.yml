@@ -1,0 +1,57 @@
+spring:
+    batch:
+        job:
+            enabled: false
+        jdbc:
+            initialize-schema: always
+    datasource:
+        driver-class-name: org.postgresql.Driver
+        url: jdbc:postgresql://localhost:15432/postgres
+        username: postgres
+        password: postgres
+    jpa:
+        properties:
+            hibernate:
+                dialect: org.hibernate.dialect.PostgreSQLDialect
+                jdbc:
+                    lob:
+                        non_contextual_creation: true
+    rabbitmq:
+        host: localhost
+        port: 5672
+        username: guest
+        password: guest
+        virtual-host: /
+pyramid:
+    rest:
+        url: http://localhost:18128/
+rabbitmq:
+    commands:
+        queue: PYRAMID_METERS.COMMANDS
+    Consolidations:
+        queue: EIP.PIRAMIDA.CONSOLIDATION.DZO.ROSSETI
+        routingKey: EIP.PIRAMIDA.CONSOLIDATION.DZO.ROSSETI
+    MeterReadings:
+        queue: EIP.READINGS.PIRAMIDA.RQ.DZO.CONSOLIDATE
+        routingKey: EIP.READINGS.PIRAMIDA.RQ.DZO.CONSOLIDATE
+    Events:
+        queue: EIP.EVENTS.PIRAMIDA.RQ.DZO.CONSOLIDATE
+        routingKey: EIP.READINGS.PIRAMIDA.RQ.DZO.CONSOLIDATE
+    BadCommand:
+        queue: PYRAMID_METERS.BAD_COMMANDS
+        exchange: PROJECT14
+        routingKey: METERS_BAD_COMMANDS
+    SuccessCommand:
+        queue: PYRAMID_METERS.SUCCESS_COMMANDS
+        exchange: PROJECT14
+        routingKey: METERS_SUCCESS_COMMANDS
+    MetersUuids:
+        exchange: PROJECT14
+        routingKey: METERS_UUIDS
+    Meters:
+        exchange: PROJECT14
+        routingKey: METERS_CONTROL
+commands:
+    GetMeter:
+        limit: 2
+configVersion: 5
