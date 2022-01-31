@@ -54,4 +54,4 @@ rabbitmq:
 commands:
     GetMeter:
         limit: 2
-configVersion: 5
+configVersion: 66

@@ -1,4 +1,4 @@
-package org.satel.eip.project14.config.server.property;
+package org.satel.eip.project14.config.server.data.application;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -9,18 +9,19 @@ import java.util.List;
 @Component
 @ConfigurationProperties(prefix = "application")
 @Data
-public class ApplicationClients {
+public class Clients {
 
-    int refreshDelay;
+    String refreshDelayInMs;
 
     List<Client> clients;
 
     @Data
     public static class Client {
         private String name;
+        private String protocol;
         private String url;
-        private String username;
-        private String userpassword;
+        private String user;
+        private String password;
     }
 
 }

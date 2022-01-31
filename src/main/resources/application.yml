@@ -18,9 +18,10 @@ application:
     clients:
         -
             name: pyramid-local.yml
+            protocol: http
             url: localhost:8081
-            username: actuator
-            userpassword: actuator
+            user: actuator
+            password: actuator
 server:
     port: 8800
 management:
