@@ -91,7 +91,7 @@ public class RestRepository {
         return clientConfig.getProperty().getValue();
     }
 
-    public boolean checkConfigVersion(Clients.Client client) throws NotValidConfigStatusException, NotValidConfigValueException {
+    private boolean checkConfigVersion(Clients.Client client) throws NotValidConfigStatusException, NotValidConfigValueException {
         return getOnServerConfigVersion(client).equals(getOnClientConfigVersion(client));
     }
 
