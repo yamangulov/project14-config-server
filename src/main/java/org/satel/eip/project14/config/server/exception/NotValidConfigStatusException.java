@@ -1,5 +1,6 @@
 package org.satel.eip.project14.config.server.exception;
 
+@Deprecated
 public class NotValidConfigStatusException extends Exception{
     public NotValidConfigStatusException(String name, int status, int delay) {
         super(String.format("Ошибка при получении конфигурации клиента %s, клиент вернул статус %s\n " +

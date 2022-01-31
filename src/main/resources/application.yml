@@ -7,7 +7,7 @@ spring:
         config:
             server:
                 native:
-                    searchLocations: file:./cfg/
+                    pathToConfigsFolder: file:./cfg/
     security:
         user:
             name: configserver

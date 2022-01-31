@@ -22,6 +22,13 @@ public class Clients {
         private String url;
         private String user;
         private String password;
+
+        public boolean isValid() {
+            //TODO if string prop is null return false
+            return true;
+        }
     }
+
+
 
 }

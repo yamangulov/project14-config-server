@@ -5,8 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.satel.eip.project14.config.server.data.application.Clients;
-import org.satel.eip.project14.config.server.data.client.ClientConfig;
-import org.satel.eip.project14.config.server.data.server.ClientConfigOnServer;
+import org.satel.eip.project14.config.server.domain.config.external.entity.ExternalConfigEntity;
+import org.satel.eip.project14.config.server.domain.config.internal.entity.InternalConfigEntity;
 import org.satel.eip.project14.config.server.exception.NotValidConfigStatusException;
 import org.satel.eip.project14.config.server.exception.NotValidConfigValueException;
 import org.satel.eip.project14.config.server.exception.NotValidRefreshStatusException;
@@ -30,6 +30,7 @@ import java.nio.file.Paths;
 
 @Repository
 @Slf4j
+@Deprecated
 public class RestRepository {
     private RestTemplate restTemplate;
     private final ObjectMapper mapper;
@@ -62,9 +63,9 @@ public class RestRepository {
             log.error("Ошибка при конвертации конфигурационного файла {} в Json формат", uri);
             //TODO подключить кастомную метрику
         }
-        ClientConfigOnServer config = new ClientConfigOnServer();
+        InternalConfigEntity config = new InternalConfigEntity();
         try {
-            config = mapper.readValue(configString, ClientConfigOnServer.class);
+            config = mapper.readValue(configString, InternalConfigEntity.class);
         } catch (JsonProcessingException e) {
             log.error("Ошибка при чтении версии конфигурации клиента из файла {}", uri);
             //TODO подключить кастомную метрику
@@ -76,19 +77,19 @@ public class RestRepository {
     public String getOnClientConfigVersion(Clients.Client client) throws NotValidConfigStatusException, NotValidConfigValueException {
         BasicAuthenticationInterceptor interceptor = setAuthInterceptor(client);
         restTemplate.getInterceptors().add(interceptor);
-        ResponseEntity<ClientConfig> responseEntity = restTemplate.getForEntity(getConfigRequest(client), ClientConfig.class);
-        ClientConfig clientConfig = responseEntity.getBody();
+        ResponseEntity<ExternalConfigEntity> responseEntity = restTemplate.getForEntity(getConfigRequest(client), ExternalConfigEntity.class);
+        ExternalConfigEntity externalConfigEntity = responseEntity.getBody();
         unsetAuthInterceptor(interceptor);
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             throw new NotValidConfigStatusException(client.getName(), responseEntity.getStatusCodeValue(), delay);
             //TODO подключить кастомную метрику
         };
-        if (clientConfig == null || clientConfig.getProperty() == null || clientConfig.getProperty().getValue() == null) {
+        if (externalConfigEntity == null || externalConfigEntity.getExternalConfigProperty() == null || externalConfigEntity.getExternalConfigProperty().getValue() == null) {
             throw new NotValidConfigValueException(client.getName(), delay);
             //TODO подключить кастомную метрику
         }
         //TODO подключить кастомную метрику
-        return clientConfig.getProperty().getValue();
+        return externalConfigEntity.getExternalConfigProperty().getValue();
     }
 
     private boolean checkConfigVersion(Clients.Client client) throws NotValidConfigStatusException, NotValidConfigValueException {
