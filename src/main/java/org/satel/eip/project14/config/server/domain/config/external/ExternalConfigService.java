@@ -2,7 +2,7 @@ package org.satel.eip.project14.config.server.domain.config.external;
 
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
-import org.satel.eip.project14.config.server.data.application.Clients;
+import org.satel.eip.project14.config.server.domain.config.internal.entity.Clients;
 import org.satel.eip.project14.config.server.domain.config.external.entity.ExternalConfigEntity;
 import org.satel.eip.project14.config.server.domain.config.external.exception.ExternalConfigServiceGenericException;
 import org.satel.eip.project14.config.server.domain.config.external.exception.GetExternalConfigByClientHttpStatusException;

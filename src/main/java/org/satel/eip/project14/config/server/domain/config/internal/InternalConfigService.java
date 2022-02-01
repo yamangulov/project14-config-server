@@ -3,7 +3,7 @@ package org.satel.eip.project14.config.server.domain.config.internal;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
-import org.satel.eip.project14.config.server.data.application.Clients;
+import org.satel.eip.project14.config.server.domain.config.internal.entity.Clients;
 import org.satel.eip.project14.config.server.domain.config.internal.entity.InternalConfigEntity;
 import org.satel.eip.project14.config.server.domain.config.internal.exception.GetInternalConfigByClientException;
 import org.springframework.beans.factory.annotation.Value;

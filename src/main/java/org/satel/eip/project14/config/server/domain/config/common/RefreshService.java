@@ -1,7 +1,7 @@
 package org.satel.eip.project14.config.server.domain.config.common;
 
 import lombok.extern.slf4j.Slf4j;
-import org.satel.eip.project14.config.server.data.application.Clients;
+import org.satel.eip.project14.config.server.domain.config.internal.entity.Clients;
 import org.satel.eip.project14.config.server.domain.config.external.ExternalConfigService;
 import org.satel.eip.project14.config.server.domain.config.external.entity.ExternalConfigEntity;
 import org.satel.eip.project14.config.server.domain.config.external.exception.ExternalConfigServiceGenericException;

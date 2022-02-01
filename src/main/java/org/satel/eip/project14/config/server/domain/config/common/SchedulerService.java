@@ -23,7 +23,7 @@ public class SchedulerService implements SchedulingConfigurer {
     @Value("${application.refreshDelayInMs}")
     private int delay;
 
-    private Executor taskExecutor;
+    private final Executor taskExecutor;
 
     @Autowired
     public SchedulerService(RefreshService refreshService, @Qualifier("forceRefreshExecutor") Executor taskExecutor) {
