@@ -12,8 +12,9 @@ public class ExternalConfigEntity {
     @JsonProperty("property")
     private ExternalConfigProperty externalConfigProperty;
 
-    public boolean isValid() {
-        //TODO проверка сущностей
-        return true;
+    public boolean isNotValid() {
+        //сюда попадает либо строка, либо null из версии клиента на клиенте,
+        // другие ошибки отлавливаются ДО попадания процесса в этот класс
+        return externalConfigProperty == null || externalConfigProperty.getValue() == null;
     }
 }

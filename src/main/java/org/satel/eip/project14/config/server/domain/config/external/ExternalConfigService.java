@@ -5,10 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.satel.eip.project14.config.server.data.application.Clients;
 import org.satel.eip.project14.config.server.domain.config.external.entity.ExternalConfigEntity;
 import org.satel.eip.project14.config.server.domain.config.external.exception.ExternalConfigServiceGenericException;
-import org.satel.eip.project14.config.server.domain.config.external.exception.ExternalConfigServiceHttpStatusException;
-import org.satel.eip.project14.config.server.domain.config.external.exception.ExternalConfigServiceNotValidEntityException;
-import org.satel.eip.project14.config.server.service.ClientPath;
-import org.springframework.beans.factory.annotation.Value;
+import org.satel.eip.project14.config.server.domain.config.external.exception.GetExternalConfigByClientHttpStatusException;
+import org.satel.eip.project14.config.server.domain.config.external.exception.GetExternalConfigByClientNotValidEntityException;
+import org.satel.eip.project14.config.server.domain.config.common.entity.ClientPath;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.support.BasicAuthenticationInterceptor;
@@ -26,8 +25,8 @@ public class ExternalConfigService {
 
     public ExternalConfigEntity getExternalConfigByClient(@NonNull Clients.Client client) throws ExternalConfigServiceGenericException {
 
-        if (!client.isValid()) {
-            throw new ExternalConfigServiceNotValidEntityException("blah blah blah");
+        if (client.isNotValid()) {
+            throw new GetExternalConfigByClientNotValidEntityException("Не все поля, необходимые для REST подключения к клиенту " + client.getName() + " заданы в конфигурационном файле сервера");
         }
 
         BasicAuthenticationInterceptor interceptor = new BasicAuthenticationInterceptor(client.getUser(), client.getPassword());
@@ -35,18 +34,15 @@ public class ExternalConfigService {
 
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
-            throw new ExternalConfigServiceHttpStatusException("blah blah blah");
-            //TODO подключить кастомную метрику
+            throw new GetExternalConfigByClientHttpStatusException("Клиент " + client.getName() + " ответил со статусом " + responseEntity.getStatusCodeValue() + ", невозможно получить текущую версию клиента");
         }
 
         ExternalConfigEntity externalConfigEntity = responseEntity.getBody();
 
-        if (externalConfigEntity == null || !externalConfigEntity.isValid()) {
-            throw new ExternalConfigServiceNotValidEntityException("blah blah blah");
-            //TODO подключить кастомную метрику
+        if (externalConfigEntity == null || !externalConfigEntity.isNotValid()) {
+            throw new GetExternalConfigByClientNotValidEntityException("Клиент " + client.getName() + " не прислал корректное тело ответного сообщения, невозможно получить текущую версию клиента");
         }
 
-        //TODO подключить кастомную метрику
         return externalConfigEntity;
     }
 
@@ -57,8 +53,7 @@ public class ExternalConfigService {
         ResponseEntity<String> responseEntity = externalConfigRepository.forceRefresh(interceptor, url);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
-            throw new ExternalConfigServiceHttpStatusException("blah blah blah");
-            //TODO подключить кастомную метрику
+            throw new GetExternalConfigByClientHttpStatusException("Клиент " + client.getName() + " ответил со статусом " + responseEntity.getStatusCodeValue() + " при попытке форсированного обновления конфигурации, фактическое обновление конфигурации не гарантируется и будет повторено при следующем запуске цикла обновления на сервере");
         }
     }
 

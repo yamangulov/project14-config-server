@@ -12,8 +12,9 @@ public class InternalConfigEntity {
     @JsonProperty("configVersion")
     private String configVersion;
 
-    public boolean isValid() {
-        //TODO сделать провреки
-        return true;
+    public boolean isNotValid() {
+        //сюда попадает либо строка, либо null из версии клиента на сервере,
+        // другие ошибки отлавливаются ДО попадания процесса в этот класс
+        return configVersion == null;
     }
 }

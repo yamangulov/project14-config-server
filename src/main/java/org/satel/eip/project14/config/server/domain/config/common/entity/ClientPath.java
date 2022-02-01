@@ -1,4 +1,4 @@
-package org.satel.eip.project14.config.server.service;
+package org.satel.eip.project14.config.server.domain.config.common.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -3,6 +3,7 @@ package org.satel.eip.project14.config.server.domain.config.external;
 import lombok.extern.slf4j.Slf4j;
 import org.satel.eip.project14.config.server.domain.config.external.entity.ExternalConfigEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -15,7 +16,7 @@ import org.springframework.web.client.RestTemplate;
 @Component
 public class ExternalConfigRepository {
 
-    private RestTemplate restTemplate;
+    private final RestTemplate restTemplate;
 
     @Autowired
     public ExternalConfigRepository(RestTemplate restTemplate) {

@@ -7,7 +7,8 @@ spring:
         config:
             server:
                 native:
-                    pathToConfigsFolder: file:./cfg/
+                    searchLocations: file:./cfg/
+#здесь нельзя менять searchLocations на другое имя, это часть спецификации config server
     security:
         user:
             name: configserver

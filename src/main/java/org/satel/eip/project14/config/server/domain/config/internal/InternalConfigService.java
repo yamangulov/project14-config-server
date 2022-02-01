@@ -5,7 +5,7 @@ import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.satel.eip.project14.config.server.data.application.Clients;
 import org.satel.eip.project14.config.server.domain.config.internal.entity.InternalConfigEntity;
-import org.satel.eip.project14.config.server.domain.config.internal.exception.InternalConfigServiceGetInternalConfigByClientException;
+import org.satel.eip.project14.config.server.domain.config.internal.exception.GetInternalConfigByClientException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -21,20 +21,22 @@ public class InternalConfigService {
 
     private final InternalConfigRepository internalConfigRepository;
 
-    @Value("${spring.cloud.config.server.native.pathToConfigsFolder}")
+    @Value("${spring.cloud.config.server.native.searchLocations}")
     private String pathToConfigsFolder;
 
     public InternalConfigService(InternalConfigRepository internalConfigRepository) {
         this.internalConfigRepository = internalConfigRepository;
     }
 
-    public InternalConfigEntity getInternalConfigByClient(@NonNull Clients.Client client) throws InternalConfigServiceGetInternalConfigByClientException {
+    public InternalConfigEntity getInternalConfigByClient(@NonNull Clients.Client client) throws GetInternalConfigByClientException {
         if (client.getName() == null || "".concat(client.getName()).isEmpty() || "".concat(client.getName()).isBlank()) {
-            throw new InternalConfigServiceGetInternalConfigByClientException("blah blah blah");
+            throw new GetInternalConfigByClientException("Не задано имя клиента " + client.getName() +
+                    "в файле конфигурации на сервере");
         }
 
         if (pathToConfigsFolder == null || "".concat(pathToConfigsFolder).isEmpty() || "".concat(pathToConfigsFolder).isBlank()) {
-            throw new InternalConfigServiceGetInternalConfigByClientException("blah blah blah");
+            throw new GetInternalConfigByClientException("Не задан путь к директории для хранения конфигураций " +
+                    "клиентов на сервере");
         }
 
         String configPathString = (pathToConfigsFolder + client.getName()).replace("file:", "");
@@ -44,21 +46,26 @@ public class InternalConfigService {
 
         File file = new File(configPath.toUri());
         if (!file.exists() || !file.isFile() || !file.canRead()) {
-            throw new InternalConfigServiceGetInternalConfigByClientException("blah blah blah");
+            throw new GetInternalConfigByClientException("Не получен файл конфигурации клиента " + client.getName() +
+                    "на сервере, проверьте существование файла, его корректность и права доступа");
         }
 
         try {
             String configContent = Files.readString(configPath);
 
             if (configContent == null || configContent.isEmpty() || configContent.isBlank()) {
-                throw new InternalConfigServiceGetInternalConfigByClientException("blah blah blah");
+                throw new GetInternalConfigByClientException("Не удалось корректно прочесть " +
+                        "содержание файла конфигурации клиента " + client.getName() +
+                        "на сервере, проверьте файл, возможно, он не заполнен");
             }
 
             return internalConfigRepository.getInternalConfigEntityByConfigContent(configContent);
         } catch (JsonProcessingException e) {
-            throw new InternalConfigServiceGetInternalConfigByClientException("blah blah blah");
+            throw new GetInternalConfigByClientException("Ошибка парсинга файла конфигурации клиента " + client.getName() +
+                    "в объект InternalConfigEntity, файл должен быть корректно размечен по спецификации YAML");
         } catch (IOException e) {
-            throw new InternalConfigServiceGetInternalConfigByClientException("blah blah blah");
+            throw new GetInternalConfigByClientException("Неизвестная ошибка ввода-вывода при получении " +
+                    "текущей конфигурации клиента " + client.getName());
         }
     }
 }
