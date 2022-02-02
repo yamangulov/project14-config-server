@@ -39,7 +39,7 @@ public class ExternalConfigService {
 
         ExternalConfigEntity externalConfigEntity = responseEntity.getBody();
 
-        if (externalConfigEntity == null || !externalConfigEntity.isNotValid()) {
+        if (externalConfigEntity == null || externalConfigEntity.isNotValid()) {
             throw new GetExternalConfigByClientNotValidEntityException("Клиент " + client.getName() + " не прислал корректное тело ответного сообщения, невозможно получить текущую версию клиента");
         }
 
