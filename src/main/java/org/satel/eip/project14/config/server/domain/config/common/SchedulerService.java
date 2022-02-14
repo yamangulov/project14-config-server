@@ -1,6 +1,9 @@
 package org.satel.eip.project14.config.server.domain.config.common;
 
 import lombok.extern.slf4j.Slf4j;
+import org.satel.eip.project14.config.server.metrics.accumulator.AccumulatorService;
+import org.satel.eip.project14.config.server.metrics.accumulator.entity.AvailableMetrics;
+import org.satel.eip.project14.config.server.metrics.accumulator.entity.Metrics;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,6 +22,7 @@ import java.util.concurrent.Executor;
 @Slf4j
 public class SchedulerService implements SchedulingConfigurer {
     private final RefreshService refreshService;
+    private final AccumulatorService accumulatorService;
 
     @Value("${application.refreshDelayInMs}")
     private int delay;
@@ -26,8 +30,9 @@ public class SchedulerService implements SchedulingConfigurer {
     private final Executor taskExecutor;
 
     @Autowired
-    public SchedulerService(RefreshService refreshService, @Qualifier("forceRefreshExecutor") Executor taskExecutor) {
+    public SchedulerService(RefreshService refreshService, AccumulatorService accumulatorService, @Qualifier("forceRefreshExecutor") Executor taskExecutor) {
         this.refreshService = refreshService;
+        this.accumulatorService = accumulatorService;
         this.taskExecutor = taskExecutor;
     }
 
@@ -46,14 +51,16 @@ public class SchedulerService implements SchedulingConfigurer {
                     if (lastCompletionTime.equals(Optional.empty())) {
                         log.info("Не удалось получить предыдущее время запуска обновления клиентов config-server.\n" +
                                 "Новый запуск обновления будет выполнен через {} ms от текущего времени.", delay);
-                        //TODO подключить кастомную метрику
+                        accumulatorService.increment(accumulatorService.getChannel("scheduler"),
+                                AvailableMetrics.SCHEDULER_ERROR_UNHANDLED);
                     }
                     Instant nextExecutionTime =
                             lastCompletionTime.orElseGet(Date::new).toInstant()
                                     .plusMillis(delay);
                     Date nextRefreshDate = Date.from(nextExecutionTime);
                     log.info("Следующее обновление клиентов config-server запланировано на дату {}", nextRefreshDate);
-                    //TODO подключить кастомную метрику
+                    accumulatorService.increment(accumulatorService.getChannel("scheduler"),
+                            AvailableMetrics.SCHEDULER_REFRESH_ATTEMPTS_TOTAL);
                     return nextRefreshDate;
                 }
         );

@@ -8,21 +8,51 @@ spring:
             server:
                 native:
                     searchLocations: file:./cfg/
-#здесь нельзя менять searchLocations на другое имя, это часть спецификации config server
     security:
         user:
             name: configserver
             password: configserver
             roles: ACTUATOR_ADMIN
 application:
-    refreshDelayInMs: 60000
+    refreshDelayInMs: 10000
     clients:
         -
             name: pyramid-local.yml
             protocol: http
-            url: localhost:8081
+            url: localhost:8082
             user: actuator
             password: actuator
+metrics:
+    project: project14.config.server
+    channels:
+        -
+            channel: external,
+            ruleName: ExternalVersion,
+            interval:
+                - 60
+                - 600
+                - 3600
+        -
+            channel: internal,
+            ruleName: InternalVersion,
+            interval:
+                - 60
+                - 600
+                - 3600
+        -
+            channel: scheduler,
+            ruleName: ScheduleRunning,
+            interval:
+                - 60
+                - 600
+                - 3600
+        -
+            channel: refresh,
+            ruleName: RefreshClientConfig,
+            interval:
+                - 60
+                - 600
+                - 3600
 server:
     port: 8800
 management:
