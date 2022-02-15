@@ -18,7 +18,7 @@ public class GaugeToAccumulator {
     @Setter
     private DoubleAccumulator accumulator;
 
-    private DoubleAccumulator scheduleCheckCounter = new DoubleAccumulator(Double::sum, 0L);
+    private final DoubleAccumulator scheduleCheckCounter = new DoubleAccumulator(Double::sum, 0L);
 
     private Integer interval;
 

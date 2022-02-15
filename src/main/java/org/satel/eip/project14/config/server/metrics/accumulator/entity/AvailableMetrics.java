@@ -3,10 +3,13 @@ package org.satel.eip.project14.config.server.metrics.accumulator.entity;
 import java.util.Arrays;
 
 public enum AvailableMetrics {
-    SCHEDULER_ERROR_UNHANDLED(".scheduler.error.get_last_refresh_time", "tag", "Число ошибок при получении предыдущего времени запуска обновления клиентов config server"),
-    SCHEDULER_REFRESH_ATTEMPTS_TOTAL(".scheduler.refresh_attempts_total", "tag", "Число попыток запуска обновления клиентов config server"),
-    EXTERNAL_ERROR_HTTP(".external.error.http", "tag", "Число ошибок при обращении к внешнему сервису"),
-    INTERNAL_ERROR_UNHANDLED(".internal.error.unhandled", "tag", "Число сообщений не обработанных из за внутренней ошибки");
+    SCHEDULER_ERROR_UNHANDLED("_scheduler_error.get_last_refresh_time", "tag", "Число ошибок при получении предыдущего времени запуска цикла обновления клиентов config server"),
+    SCHEDULER_REFRESH_ATTEMPTS_TOTAL("_scheduler_refresh_attempts_total", "tag", "Число запусков цикла обновления клиентов config server"),
+    REFRESH_FORCE_TOTAL("_refresh_force_running_total", "tag", "Число запусков обновления отдельных клиентов config server"),
+    REFRESH_UNNECESSARY_TOTAL("_refresh_running_unnecessary_total", "tag", "Число проверок, когда обновление клиента config server не понадобилось"),
+    INTERNAL_ERROR_SERVICE("_internal_error_service", "tag", "Число ошибок при обращении к InternalConfigService"),
+    EXTERNAL_ERROR_SERVICE("_external_error_service", "tag", "Число ошибок при обращении к ExternalConfigService"),
+    REFRESH_ERROR_UNRECOGNIZED("_refresh_error_unrecognized", "tag", "Число нераспознанных ошибок при запуске обновления клиента config server");
 
     private final String metric;
     private final String tag;

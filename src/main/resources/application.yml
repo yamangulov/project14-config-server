@@ -26,29 +26,29 @@ metrics:
     project: project14.config.server
     channels:
         -
-            channel: external,
-            ruleName: ExternalVersion,
+            channel: external
+            ruleName: ExternalVersion
             interval:
                 - 60
                 - 600
                 - 3600
         -
-            channel: internal,
-            ruleName: InternalVersion,
+            channel: internal
+            ruleName: InternalVersion
             interval:
                 - 60
                 - 600
                 - 3600
         -
-            channel: scheduler,
-            ruleName: ScheduleRunning,
+            channel: scheduler
+            ruleName: ScheduleRunning
             interval:
                 - 60
                 - 600
                 - 3600
         -
-            channel: refresh,
-            ruleName: RefreshClientConfig,
+            channel: refresh
+            ruleName: RefreshClientConfig
             interval:
                 - 60
                 - 600
