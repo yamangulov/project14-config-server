@@ -3,7 +3,7 @@ package org.satel.eip.project14.config.server.metrics.accumulator.entity;
 import java.util.Arrays;
 
 public enum AvailableMetrics {
-    SCHEDULER_ERROR_UNHANDLED("_scheduler_error.get_last_refresh_time", "tag", "Число ошибок при получении предыдущего времени запуска цикла обновления клиентов config server"),
+    SCHEDULER_ERROR_UNHANDLED("_scheduler_error_get_last_refresh_time", "tag", "Число ошибок при получении предыдущего времени запуска цикла обновления клиентов config server"),
     SCHEDULER_REFRESH_ATTEMPTS_TOTAL("_scheduler_refresh_attempts_total", "tag", "Число запусков цикла обновления клиентов config server"),
     REFRESH_FORCE_TOTAL("_refresh_force_running_total", "tag", "Число запусков обновления отдельных клиентов config server"),
     REFRESH_UNNECESSARY_TOTAL("_refresh_running_unnecessary_total", "tag", "Число проверок, когда обновление клиента config server не понадобилось"),

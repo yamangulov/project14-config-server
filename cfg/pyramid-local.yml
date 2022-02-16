@@ -54,4 +54,20 @@ rabbitmq:
 commands:
     GetMeter:
         limit: 2
-configVersion: 5
+metrics:
+    project: project14.adapter.pyramid
+    channels:
+        -
+            channel: commandListener
+            ruleName: CommandListener
+            interval:
+                - 60
+                - 600
+                - 3600
+        -   channel: batchJob
+            ruleName: BatchJob
+            interval:
+                - 60
+                - 600
+                - 3600
+configVersion: 55
